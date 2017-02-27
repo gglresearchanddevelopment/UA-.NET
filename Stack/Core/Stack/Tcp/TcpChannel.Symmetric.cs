@@ -203,7 +203,7 @@ namespace Opc.Ua.Bindings
                 case SecurityPolicies.Basic256:                
                 {
                     // create encryptors.                    
-                    RijndaelManaged encryptor = new RijndaelManaged();
+                    Aes encryptor = new AesCryptoServiceProvider();
 
                     encryptor.Key     = token.ClientEncryptingKey;
                     encryptor.IV      = token.ClientInitializationVector;
@@ -212,7 +212,7 @@ namespace Opc.Ua.Bindings
                     
                     token.ClientEncryptor = encryptor;
                     
-                    encryptor = new RijndaelManaged();
+                    encryptor = new AesCryptoServiceProvider();
 
                     encryptor.Key     = token.ServerEncryptingKey;
                     encryptor.IV      = token.ServerInitializationVector;
@@ -229,7 +229,7 @@ namespace Opc.Ua.Bindings
                 case SecurityPolicies.Basic256Sha256:
                 {
                     // create encryptors.                    
-                    RijndaelManaged encryptor = new RijndaelManaged();
+                    Aes encryptor = new AesCryptoServiceProvider();
 
                     encryptor.Key = token.ClientEncryptingKey;
                     encryptor.IV = token.ClientInitializationVector;
@@ -238,7 +238,7 @@ namespace Opc.Ua.Bindings
 
                     token.ClientEncryptor = encryptor;
 
-                    encryptor = new RijndaelManaged();
+                    encryptor = new AesCryptoServiceProvider();
 
                     encryptor.Key = token.ServerEncryptingKey;
                     encryptor.IV = token.ServerInitializationVector;

@@ -100,13 +100,15 @@ namespace Opc.Ua.Bindings
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToSign.Array, dataToSign.Offset, dataToSign.Count, false);
 
-            SHA1 hash = new SHA1Managed();                               
-            byte[] digest = hash.ComputeHash(istrm);
+            using (SHA1 hash = new SHA1CryptoServiceProvider())
+            {
+                byte[] digest = hash.ComputeHash(istrm);
 
-            istrm.Close();
-            
-            // create the signature.
-            return rsa.SignHash(digest, "SHA1");
+                istrm.Close();
+
+                // create the signature.
+                return rsa.SignHash(digest, "SHA1");
+            }
         }
         
         /// <summary>
@@ -128,31 +130,33 @@ namespace Opc.Ua.Bindings
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToVerify.Array, dataToVerify.Offset, dataToVerify.Count, false);
 
-            SHA1 hash = new SHA1Managed();                               
-            byte[] digest = hash.ComputeHash(istrm);
-            
-            istrm.Close();
-
-            // verify signature.
-            if (!rsa.VerifyHash(digest, "SHA1", signature))
+            using (SHA1 hash = new SHA1CryptoServiceProvider())
             {
-                string messageType = new UTF8Encoding().GetString(dataToVerify.Array, dataToVerify.Offset, 4);
-                int messageLength = BitConverter.ToInt32(dataToVerify.Array, dataToVerify.Offset+4);
-                string expectedDigest = Utils.ToHexString(digest);
-                string actualSignature = Utils.ToHexString(signature);
+                byte[] digest = hash.ComputeHash(istrm);
 
-                Utils.Trace(
-                    "Could not validate signature.\r\nCertificate={0}, MessageType={1}, Length={2}\r\nDigest={3}\r\nActualSignature={4}",
-                    signingCertificate.Subject,
-                    messageType,
-                    messageLength,
-                    expectedDigest,
-                    actualSignature);
+                istrm.Close();
 
-                return false;
+                // verify signature.
+                if (!rsa.VerifyHash(digest, "SHA1", signature))
+                {
+                    string messageType = new UTF8Encoding().GetString(dataToVerify.Array, dataToVerify.Offset, 4);
+                    int messageLength = BitConverter.ToInt32(dataToVerify.Array, dataToVerify.Offset + 4);
+                    string expectedDigest = Utils.ToHexString(digest);
+                    string actualSignature = Utils.ToHexString(signature);
+
+                    Utils.Trace(
+                        "Could not validate signature.\r\nCertificate={0}, MessageType={1}, Length={2}\r\nDigest={3}\r\nActualSignature={4}",
+                        signingCertificate.Subject,
+                        messageType,
+                        messageLength,
+                        expectedDigest,
+                        actualSignature);
+
+                    return false;
+                }
+
+                return true;
             }
-
-            return true;
         }
 
 
@@ -186,13 +190,14 @@ namespace Opc.Ua.Bindings
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToSign.Array, dataToSign.Offset, dataToSign.Count, false);
 
-            SHA256 hash = new SHA256Managed();
+            using (SHA256 hash = new SHA256CryptoServiceProvider())
+            {
+                byte[] digest = hash.ComputeHash(istrm);
 
-            byte[] digest = hash.ComputeHash(istrm);
+                istrm.Close();
 
-            istrm.Close();
-            
-            return rsa2.SignHash(digest, "SHA256");
+                return rsa2.SignHash(digest, "SHA256");
+            }
         }
 
         /// <summary>
@@ -214,31 +219,33 @@ namespace Opc.Ua.Bindings
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToVerify.Array, dataToVerify.Offset, dataToVerify.Count, false);
 
-            SHA256 hash = new SHA256Managed();
-            byte[] digest = hash.ComputeHash(istrm);
-
-            istrm.Close();
-
-            // verify signature.
-            if (!rsa.VerifyHash(digest, "SHA256", signature))
+            using (SHA256 hash = new SHA256CryptoServiceProvider())
             {
-                string messageType = new UTF8Encoding().GetString(dataToVerify.Array, dataToVerify.Offset, 4);
-                int messageLength = BitConverter.ToInt32(dataToVerify.Array, dataToVerify.Offset + 4);
-                string expectedDigest = Utils.ToHexString(digest);
-                string actualSignature = Utils.ToHexString(signature);
+                byte[] digest = hash.ComputeHash(istrm);
 
-                Utils.Trace(
-                    "Could not validate signature.\r\nCertificate={0}, MessageType={1}, Length={2}\r\nDigest={3}\r\nActualSignature={4}",
-                    signingCertificate.Subject,
-                    messageType,
-                    messageLength,
-                    expectedDigest,
-                    actualSignature);
+                istrm.Close();
 
-                return false;
+                // verify signature.
+                if (!rsa.VerifyHash(digest, "SHA256", signature))
+                {
+                    string messageType = new UTF8Encoding().GetString(dataToVerify.Array, dataToVerify.Offset, 4);
+                    int messageLength = BitConverter.ToInt32(dataToVerify.Array, dataToVerify.Offset + 4);
+                    string expectedDigest = Utils.ToHexString(digest);
+                    string actualSignature = Utils.ToHexString(signature);
+
+                    Utils.Trace(
+                        "Could not validate signature.\r\nCertificate={0}, MessageType={1}, Length={2}\r\nDigest={3}\r\nActualSignature={4}",
+                        signingCertificate.Subject,
+                        messageType,
+                        messageLength,
+                        expectedDigest,
+                        actualSignature);
+
+                    return false;
+                }
+
+                return true;
             }
-
-            return true;
         }
 
         /// <summary>

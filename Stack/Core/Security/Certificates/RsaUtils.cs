@@ -97,13 +97,15 @@ namespace Opc.Ua
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToSign.Array, dataToSign.Offset, dataToSign.Count, false);
 
-            SHA1 hash = new SHA1Managed();                               
-            byte[] digest = hash.ComputeHash(istrm);
+            using (SHA1 hash = new SHA1CryptoServiceProvider())
+            {
+                byte[] digest = hash.ComputeHash(istrm);
 
-            istrm.Close();
-            
-            // create the signature.
-            return rsa.SignHash(digest, "SHA1");
+                istrm.Close();
+
+                // create the signature.
+                return rsa.SignHash(digest, "SHA1");
+            }
         }
         
         /// <summary>
@@ -125,13 +127,15 @@ namespace Opc.Ua
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToVerify.Array, dataToVerify.Offset, dataToVerify.Count, false);
 
-            SHA1 hash = new SHA1Managed();                               
-            byte[] digest = hash.ComputeHash(istrm);
-            
-            istrm.Close();
+            using (SHA1 hash = new SHA1CryptoServiceProvider())
+            {
+                byte[] digest = hash.ComputeHash(istrm);
 
-            // verify signature.
-            return rsa.VerifyHash(digest, "SHA1", signature);
+                istrm.Close();
+
+                // verify signature.
+                return rsa.VerifyHash(digest, "SHA1", signature);
+            }
         }
 
         /// <summary>
@@ -164,13 +168,15 @@ namespace Opc.Ua
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToSign.Array, dataToSign.Offset, dataToSign.Count, false);
 
-            SHA256 hash = new SHA256Managed();
-            byte[] digest = hash.ComputeHash(istrm);
+            using (SHA256 hash = new SHA256CryptoServiceProvider())
+            {
+                byte[] digest = hash.ComputeHash(istrm);
 
-            istrm.Close();
+                istrm.Close();
 
-            // create the signature.
-            return rsa2.SignHash(digest, "SHA256");
+                // create the signature.
+                return rsa2.SignHash(digest, "SHA256");
+            }
         }
 
         /// <summary>
@@ -193,13 +199,15 @@ namespace Opc.Ua
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToVerify.Array, dataToVerify.Offset, dataToVerify.Count, false);
 
-            SHA256 hash = new SHA256Managed();
-            byte[] digest = hash.ComputeHash(istrm);
+            using (SHA256 hash = new SHA256CryptoServiceProvider())
+            {
+                byte[] digest = hash.ComputeHash(istrm);
 
-            istrm.Close();
+                istrm.Close();
 
-            // verify signature.
-            return rsa.VerifyHash(digest, "SHA256", signature);
+                // verify signature.
+                return rsa.VerifyHash(digest, "SHA256", signature);
+            }
         }
 
         /// <summary>
