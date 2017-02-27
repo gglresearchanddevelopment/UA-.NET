@@ -1088,7 +1088,7 @@ namespace Opc.Ua
                             continue;
                         }
 
-                        if (bestPolicy.SecurityLevel > policy.SecurityLevel)
+                        if (bestPolicy.SecurityLevel < policy.SecurityLevel)
                         {
                             bestPolicy = policy;
                             continue;
@@ -1135,9 +1135,9 @@ namespace Opc.Ua
                     //    description.ServerCertificate = certificateChainList.ToArray();
                     //}
 
-                    description.SecurityMode = MessageSecurityMode.None;
-                    description.SecurityPolicyUri = SecurityPolicies.None;
-                    description.SecurityLevel = 0;
+                    description.SecurityMode = bestPolicy.SecurityMode;
+                    description.SecurityPolicyUri = bestPolicy.SecurityPolicyUri;
+                    description.SecurityLevel = bestPolicy.SecurityLevel;
                     description.UserIdentityTokens = GetUserTokenPolicies(configuration, description);
                     description.TransportProfileUri = Profiles.HttpsXmlTransport;
 

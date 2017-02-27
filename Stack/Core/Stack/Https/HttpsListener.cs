@@ -297,6 +297,8 @@ namespace Opc.Ua.Bindings
                     binding = new WebHttpBinding();
                 }
 
+                binding.MaxReceivedMessageSize = m_configuration.MaxMessageSize;
+
                 Service service = new Service();
                 service.Listener = this;
                 m_host = new System.ServiceModel.ServiceHost(service, m_uri);

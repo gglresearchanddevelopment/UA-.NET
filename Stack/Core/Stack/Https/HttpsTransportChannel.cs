@@ -351,6 +351,10 @@ namespace Opc.Ua.Bindings
 
             decoder.PushNamespace(Namespaces.OpcUaXsd);
             IEncodeable message = decoder.ReadEncodeable(typeName, messageType);
+            if (reader.IsStartElement("ServiceFault", Namespaces.OpcUaXsd))
+            {
+                message = decoder.ReadEncodeable("ServiceFault", typeof(ServiceFault));
+            }
             decoder.PopNamespace();
 
             reader.ReadEndElement();
