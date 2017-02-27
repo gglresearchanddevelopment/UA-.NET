@@ -290,6 +290,7 @@
     <Compile Include="Types\Constants\StatusCodes.Helpers.cs" />
     <Compile Include="Types\Constants\Attributes.Helpers.cs" />
     <Compile Include="Types\Generated\Opc.Ua.Attributes.cs" />
+    <Compile Include="Types\Generated\Opc.Ua.DataTypes.cs" />
     <Compile Include="Types\Generated\Opc.Ua.StatusCodes.cs" />
     <Compile Include="Types\Encoders\BinaryDecoder.cs" />
     <Compile Include="Types\Encoders\BinaryEncoder.cs" />
