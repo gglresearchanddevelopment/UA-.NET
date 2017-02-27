@@ -1316,75 +1316,100 @@ namespace Opc.Ua.Server
                 diagnosticInfos = new DiagnosticInfoCollection(count);
             }
 
-            lock (m_lock)
+            try
             {
-                // check session again after CreateMonitoredItems.
-                VerifySession(context);
-
-                for (int ii = 0; ii < errors.Count; ii++)
+                lock (m_lock)
                 {
-                    // update results.
-                    MonitoredItemCreateResult result = null;
-                    
-                    if (ServiceResult.IsBad(errors[ii]))
-                    {
-                        result = new MonitoredItemCreateResult();
-                        result.StatusCode = errors[ii].Code;
+                    // check session again after CreateMonitoredItems.
+                    VerifySession(context);
 
-                        if (filterResults[ii] != null)
+                    for (int ii = 0; ii < errors.Count; ii++)
+                    {
+                        // update results.
+                        MonitoredItemCreateResult result = null;
+
+                        if (ServiceResult.IsBad(errors[ii]))
                         {
-                            result.FilterResult = new ExtensionObject(filterResults[ii]);
+                            result = new MonitoredItemCreateResult();
+                            result.StatusCode = errors[ii].Code;
+
+                            if (filterResults[ii] != null)
+                            {
+                                result.FilterResult = new ExtensionObject(filterResults[ii]);
+                            }
+                        }
+                        else
+                        {
+                            IMonitoredItem monitoredItem = monitoredItems[ii];
+
+                            if (monitoredItem != null)
+                            {
+                                monitoredItem.SubscriptionCallback = this;
+
+                                LinkedListNode<IMonitoredItem> node = m_itemsToCheck.AddLast(monitoredItem);
+                                m_monitoredItems.Add(monitoredItem.Id, node);
+
+                                errors[ii] = monitoredItem.GetCreateResult(out result);
+
+                                // update sampling interval diagnostics.
+                                AddItemToSamplingInterval(result.RevisedSamplingInterval, itemsToCreate[ii].MonitoringMode);
+                            }
+                        }
+
+                        results.Add(result);
+
+                        // update diagnostics.
+                        if ((context.DiagnosticsMask & DiagnosticsMasks.OperationAll) != 0)
+                        {
+                            DiagnosticInfo diagnosticInfo = null;
+
+                            if (errors[ii] != null && errors[ii].Code != StatusCodes.Good)
+                            {
+                                diagnosticInfo = ServerUtils.CreateDiagnosticInfo(m_server, context, errors[ii]);
+                                diagnosticsExist = true;
+                            }
+
+                            diagnosticInfos.Add(diagnosticInfo);
                         }
                     }
-                    else
+
+                    // clear diagnostics if not required.
+                    if (!diagnosticsExist && diagnosticInfos != null)
                     {
-                        IMonitoredItem monitoredItem = monitoredItems[ii];
-
-                        if (monitoredItem != null)
-                        {
-                            monitoredItem.SubscriptionCallback = this;
-                            
-                            LinkedListNode<IMonitoredItem> node = m_itemsToCheck.AddLast(monitoredItem);
-                            m_monitoredItems.Add(monitoredItem.Id, node);
-
-                            errors[ii] = monitoredItem.GetCreateResult(out result);
-
-                            // update sampling interval diagnostics.
-                            AddItemToSamplingInterval(result.RevisedSamplingInterval, itemsToCreate[ii].MonitoringMode);
-                        }
-                    }                   
-
-                    results.Add(result);
+                        diagnosticInfos.Clear();
+                    }
 
                     // update diagnostics.
-                    if ((context.DiagnosticsMask & DiagnosticsMasks.OperationAll) != 0)
+                    lock (m_diagnostics)
                     {
-                        DiagnosticInfo diagnosticInfo = null;
-                        
-                        if (errors[ii] != null && errors[ii].Code != StatusCodes.Good)
-                        {
-                            diagnosticInfo = ServerUtils.CreateDiagnosticInfo(m_server, context, errors[ii]);
-                            diagnosticsExist = true;
-                        }
-
-                        diagnosticInfos.Add(diagnosticInfo);
+                        m_diagnostics.MonitoredItemCount = 0;
+                        m_diagnostics.DisabledMonitoredItemCount = 0;
                     }
-                }
 
-                // clear diagnostics if not required.
-                if (!diagnosticsExist && diagnosticInfos != null)
-                {
-                    diagnosticInfos.Clear();
+                    // TraceState("ITEMS CREATED");
                 }
+            }
+            catch (ServiceResultException e)
+            {
+                // delete the monitored items if the session or subscription is no longer valid
+                if (e.StatusCode == StatusCodes.BadSubscriptionIdInvalid || e.StatusCode == StatusCodes.BadSessionIdInvalid)
+                {
+                    results = null;
+                    diagnosticInfos = null;
 
-                // update diagnostics.
-                lock (m_diagnostics)
-                {
-                    m_diagnostics.MonitoredItemCount = 0;
-                    m_diagnostics.DisabledMonitoredItemCount = 0;
+                    List<ServiceResult> deleteErrors = new List<ServiceResult>(count);
+                    for (int ii = 0; ii < count; ii++)
+                    {
+                        deleteErrors.Add(null);
+                    }
+
+                    m_server.NodeManager.DeleteMonitoredItems(
+                        context,
+                        this.m_id,
+                        monitoredItems,
+                        deleteErrors);
                 }
-                
-                // TraceState("ITEMS CREATED");
+                throw;
             }
         }
 
