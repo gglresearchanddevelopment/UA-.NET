@@ -174,18 +174,22 @@ namespace Opc.Ua.Bindings
             {
                 throw ServiceResultException.Create(StatusCodes.BadSecurityChecksFailed, "No private key for certificate.");
             }
-			
-			// Instantiate enhanced crypto provider that supports SHA256 
-            byte[] privateKeyBlob = rsa.ExportCspBlob(true);
-            var enhCsp = new RSACryptoServiceProvider().CspKeyContainerInfo;
-            string mKeyContainerName = rsa.CspKeyContainerInfo.KeyContainerName;
-            var cspparams = new CspParameters
-            (
-                    enhCsp.ProviderType, enhCsp.ProviderName, mKeyContainerName
-            );
 
-            RSACryptoServiceProvider rsa2 = new RSACryptoServiceProvider(rsa.KeySize, cspparams);
-            rsa2.ImportCspBlob(privateKeyBlob);
+            // Instantiate enhanced crypto provider that supports SHA256 
+            const int PROV_RSA_AES = 24;
+            if (rsa != null && rsa.CspKeyContainerInfo.ProviderType != PROV_RSA_AES && rsa.CspKeyContainerInfo.Exportable)
+            {
+                byte[] privateKeyBlob = rsa.ExportCspBlob(true);
+                var enhCsp = new RSACryptoServiceProvider().CspKeyContainerInfo;
+                string mKeyContainerName = rsa.CspKeyContainerInfo.KeyContainerName;
+                var cspparams = new CspParameters
+                (
+                        enhCsp.ProviderType, enhCsp.ProviderName, mKeyContainerName
+                );
+
+                rsa = new RSACryptoServiceProvider(rsa.KeySize, cspparams);
+                rsa.ImportCspBlob(privateKeyBlob);
+            }
 
             // compute the hash of message.
             MemoryStream istrm = new MemoryStream(dataToSign.Array, dataToSign.Offset, dataToSign.Count, false);
@@ -196,7 +200,7 @@ namespace Opc.Ua.Bindings
 
                 istrm.Close();
 
-                return rsa2.SignHash(digest, "SHA256");
+                return rsa.SignHash(digest, "SHA256");
             }
         }
 

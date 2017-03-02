@@ -995,8 +995,8 @@ namespace Opc.Ua
         #if !SILVERLIGHT
         #region PInvoke Declarations
         private const string KEY_CONTAINER_NAME = "UASDKDefaultKeyContainer3";
-        private const string MS_STRONG_PROV_W = "Microsoft Strong Cryptographic Provider";
-        private const string DEFAULT_CRYPTO_PROVIDER = MS_STRONG_PROV_W;
+        private const string MS_ENH_RSA_AES_PROV = "Microsoft Enhanced RSA and AES Cryptographic Provider";
+        private const string DEFAULT_CRYPTO_PROVIDER = MS_ENH_RSA_AES_PROV;
         private const int X509_ASN_ENCODING = 0x00000001;
         private const int PKCS_7_ASN_ENCODING = 0x00010000;
         private const int CRYPT_DECODE_ALLOC_FLAG = 0x8000;
@@ -1067,7 +1067,7 @@ namespace Opc.Ua
         private const int KP_CERTIFICATE = 26;
         private const int KP_KEYLEN = 9;
 
-        private const int PROV_RSA_FULL = 1;
+        private const int PROV_RSA_AES = 24;
 
         private const int NTE_EXISTS = -0x7FF6FFF1; // 0x8009000F
         private const int NTE_BAD_KEYSET = -0x7FF6FFEA; // 0x80090016
@@ -2287,7 +2287,7 @@ namespace Opc.Ua
 
                 kpi.pwszContainerName = KEY_CONTAINER_NAME; // must be the same as the hProvider
                 kpi.pwszProvName = DEFAULT_CRYPTO_PROVIDER;
-                kpi.dwProvType = PROV_RSA_FULL;
+                kpi.dwProvType = PROV_RSA_AES;
                 kpi.dwFlags = CERT_SET_KEY_CONTEXT_PROP_ID;
                 kpi.dwKeySpec = AT_KEYEXCHANGE;
 
@@ -2477,7 +2477,7 @@ namespace Opc.Ua
                     ref hProvider,
                     KEY_CONTAINER_NAME,
                     DEFAULT_CRYPTO_PROVIDER,
-                    PROV_RSA_FULL,
+                    PROV_RSA_AES,
                     CRYPT_MACHINE_KEYSET);
 
                 if (bResult == 0)
@@ -2486,7 +2486,7 @@ namespace Opc.Ua
                         ref hProvider,
                         KEY_CONTAINER_NAME,
                         DEFAULT_CRYPTO_PROVIDER,
-                        PROV_RSA_FULL,
+                        PROV_RSA_AES,
                         CRYPT_NEWKEYSET | CRYPT_MACHINE_KEYSET);
 
                     if (bResult == 0)
@@ -2602,7 +2602,7 @@ namespace Opc.Ua
                     ref hProvider,
                     KEY_CONTAINER_NAME,
                     DEFAULT_CRYPTO_PROVIDER,
-                    PROV_RSA_FULL,
+                    PROV_RSA_AES,
                     CRYPT_DELETEKEYSET | CRYPT_MACHINE_KEYSET);
 
                 if (bResult == 0)
@@ -4023,7 +4023,7 @@ namespace Opc.Ua
             IntPtr hProv = IntPtr.Zero;
             int dwFlags = 0;
 
-            int gotcsp = NativeMethods.CryptAcquireContextW(ref hProv, null, null, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET);
+            int gotcsp = NativeMethods.CryptAcquireContextW(ref hProv, null, null, PROV_RSA_AES, CRYPT_VERIFYCONTEXT | CRYPT_MACHINE_KEYSET);
 
             if (gotcsp == 0)
             {
