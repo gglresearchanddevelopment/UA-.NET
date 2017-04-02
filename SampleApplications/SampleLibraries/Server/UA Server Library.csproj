@@ -1,73 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E16F908B-C338-4B0C-9E72-2ADAD8FB98D5}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Opc.Ua.Server</RootNamespace>
     <AssemblyName>Opc.Ua.Server</AssemblyName>
-    <MinFrameworkVersionRequired>3.0</MinFrameworkVersionRequired>
+    <TargetFramework>net45</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\Key\OPC Key Pair.snk</AssemblyOriginatorKeyFile>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <PublishUrl>http://localhost/Opc.Ua.Server/</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;xLEGACY_CORENODEMANAGER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <CodeAnalysisRules>-Microsoft.Design#CA1021;-Microsoft.Design#CA1011;-Microsoft.Design#CA1009;-Microsoft.Design#CA1031;-Microsoft.Design#CA1000;-Microsoft.Design#CA1002;-Microsoft.Design#CA1006;-Microsoft.Design#CA1045;-Microsoft.Design#CA1065;-Microsoft.Design#CA1014;-Microsoft.Design#CA1034;-Microsoft.Design#CA1057;-Microsoft.Design#CA1054;-Microsoft.Design#CA1056;-Microsoft.Design#CA1055;-Microsoft.Design#CA1030;-Microsoft.Design#CA1007;-Microsoft.Design#CA1024;-Microsoft.Naming#CA1711;-Microsoft.Naming#CA1716;-Microsoft.Naming#CA1726;-Microsoft.Performance#CA1805;-Microsoft.Usage#CA2227;-Microsoft.Usage#CA1801</CodeAnalysisRules>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE;xLEGACY_CORENODEMANAGER</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Release\Opc.Ua.Server.XML</DocumentationFile>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Copyright>Copyright © 2004-2016 OPC Foundation, Inc</Copyright>
+    <Version>1.03.341.0</Version>
+    <Description>UA Server Library</Description>
+    <Company>OPC Foundation</Company>
+    <Product>OPC UA SDK</Product>
+    <Authors>OPC Foundation</Authors>
+    <PackageProjectUrl>https://github.com/gglresearchanddevelopment/UA-.NET</PackageProjectUrl>
+    <PackageLicenseUrl>http://opcfoundation.github.io/UA-.NET</PackageLicenseUrl>
+    <PackageIconUrl>https://opcfoundation.org/wp-content/themes/opc/images/logo.jpg</PackageIconUrl>
+    <PackageTags>OPCFoundation OPC-UA</PackageTags>
+    <PackageId>Gallagher.Opc.Ua.Server</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel.Selectors" />
     <Reference Include="System.Runtime.Serialization" />
@@ -97,24 +51,12 @@
     <Compile Include="Diagnostics\v10\DataChangeMonitoredItem.cs" />
     <Compile Include="Diagnostics\v10\MonitoredNode.cs" />
     <Compile Include="Documentation\Opc.Ua.Server.cs" />
-    <Compile Include="NodeManager\ICallable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NodeManager\IDataProducer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NodeManager\IDataSource.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NodeManager\IEventHistoryProducer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NodeManager\IEventSource.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NodeManager\EventManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="NodeManager\ICallable.cs" />
+    <Compile Include="NodeManager\IDataProducer.cs" />
+    <Compile Include="NodeManager\IDataSource.cs" />
+    <Compile Include="NodeManager\IEventHistoryProducer.cs" />
+    <Compile Include="NodeManager\IEventSource.cs" />
+    <Compile Include="NodeManager\EventManager.cs" />
     <Compile Include="NodeManager\ServerSystemContext.cs" />
     <Compile Include="Properties\AssemblyVersionInfo.cs" />
     <Compile Include="Server\ServerInternalData.cs" />
@@ -134,62 +76,15 @@
     <Compile Include="NodeManager\INodeManager.cs" />
     <Compile Include="NodeManager\MasterNodeManager.cs" />
     <Compile Include="Server\StandardServer.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subscription\AsyncPublishOperation.cs" />
     <Compile Include="Subscription\IMonitoredItem.cs" />
-    <Compile Include="Subscription\PublishingState.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Subscription\PublishingState.cs" />
     <Compile Include="Subscription\MonitoredItem.cs" />
     <Compile Include="Subscription\SessionPublishQueue.cs" />
     <Compile Include="Subscription\Subscription.cs" />
     <Compile Include="Subscription\SubscriptionManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
+    <ProjectReference Include="..\..\..\Stack\Core\UA Core Library.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Stack\Core\UA Core Library.csproj">
-      <Project>{7543AFCB-F5AF-44AF-83C9-23164474C1E9}</Project>
-      <Name>UA Core Library</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
 </Project>
