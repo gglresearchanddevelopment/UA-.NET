@@ -17,6 +17,7 @@
     <PackageIconUrl>https://opcfoundation.org/wp-content/themes/opc/images/logo.jpg</PackageIconUrl>
     <PackageTags>OPCFoundation OPC-UA</PackageTags>
     <PackageId>Gallagher.Opc.Ua.Core</PackageId>
+    <IncludeSymbols>true</IncludeSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
