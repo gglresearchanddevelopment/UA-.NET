@@ -7,11 +7,11 @@
     <AssemblyOriginatorKeyFile>..\..\..\Key\OPC Key Pair.snk</AssemblyOriginatorKeyFile>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <Copyright>Copyright © 2004-2016 OPC Foundation, Inc</Copyright>
-    <Version>1.03.341.0</Version>
+    <Version>1.0.0</Version>
     <Description>UA Server Library</Description>
     <Company>OPC Foundation</Company>
-    <Product>OPC UA SDK</Product>
-    <Authors>OPC Foundation</Authors>
+    <Product>OPC UA SDK 1.03.341.0</Product>
+    <Authors>OPC Foundation, Gallagher Research and Development</Authors>
     <PackageProjectUrl>https://github.com/gglresearchanddevelopment/UA-.NET</PackageProjectUrl>
     <PackageLicenseUrl>http://opcfoundation.github.io/UA-.NET</PackageLicenseUrl>
     <PackageIconUrl>https://opcfoundation.org/wp-content/themes/opc/images/logo.jpg</PackageIconUrl>
